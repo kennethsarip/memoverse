@@ -6,6 +6,13 @@ module.exports = [
   ...expoConfig,
   prettierRecommended,
   {
+    // Jest setup + manual mocks run in the test runtime; expose those globals.
+    files: ['jest.setup.js', '__mocks__/**'],
+    languageOptions: {
+      globals: { jest: 'readonly', require: 'readonly', module: 'writable' },
+    },
+  },
+  {
     ignores: ['dist/*', 'node_modules/*', '.expo/*', 'coverage/*', 'android/*', 'ios/*'],
   },
 ];

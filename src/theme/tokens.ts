@@ -82,6 +82,8 @@ export const typography = {
   display: { fontSize: 34, fontWeight: '800', lineHeight: 40 },
   title: { fontSize: 24, fontWeight: '700', lineHeight: 30 },
   heading: { fontSize: 18, fontWeight: '700', lineHeight: 24 },
+  // Roomy line height so wrapped word chips in the verse card breathe.
+  verse: { fontSize: 22, fontWeight: '600', lineHeight: 36 },
   body: { fontSize: 16, fontWeight: '400', lineHeight: 24 },
   caption: { fontSize: 13, fontWeight: '500', lineHeight: 18 },
 } as const;
