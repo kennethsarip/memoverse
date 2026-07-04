@@ -33,7 +33,8 @@ npm install
 cp .env.example .env        # then fill in your Supabase URL and anon key
 
 # 3. Start the local database (optional but recommended for development)
-npx supabase start
+npx supabase start          # if ports 54321-54324 are taken by another Supabase
+                            # project, offset the ports in supabase/config.toml
 npx supabase db reset       # applies migrations + seeds the WEB sample pack
 
 # 4. Run the app

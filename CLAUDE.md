@@ -385,17 +385,6 @@ group_assignments (
 
 ### Version 1 — Solo memorization MVP (the whole promise, for individuals)
 
-- 1.1 Foundations
-  - Initialize an Expo (managed) TypeScript app; configure Expo Router with a tabs layout and an onboarding stack.
-  - Add and configure NativeWind; create src/theme design tokens (colors, spacing, typography) for light and dark.
-  - Configure strict tsconfig, ESLint, Prettier; add npm scripts typecheck, lint, format, test.
-  - Set up Jest + @testing-library/react-native with one sample passing test.
-  - Create the Supabase project; add .env.example and the supabase client in src/lib.
-  - Write the first SQL migration for all Section 5.1 tables with RLS enabled (default deny) and public-read policies for content tables.
-  - Add a seed script inserting the WEB translation row and one sample curated pack (3 to 5 verses).
-  - Add GitHub Actions CI running typecheck, lint, test on pull requests.
-  - Checkpoint: app boots to a themed home screen; supabase db reset migrates and seeds; CI is green.
-
 - 1.2 First-letter engine (pure logic, TDD)
   - Write failing unit tests first for tokenize(), covering John 3:16, punctuation, quotes, numbers in the reference, single-word, and empty verses.
   - Implement tokenize(verseText, reference) returning ordered Token[] with firstLetter and isReference.
@@ -652,6 +641,7 @@ Documentation and token efficiency (keep Claude Code cheap to run)
 | 6 | KJV as second free translation | NICE-TO-HAVE | WEB is default. KJV is public-domain and trivial to add if requested. |
 | 7 | Streak freezes / challenge mode | LATER | Considered for 3.4. |
 | 8 | Group join for under-13 | V2 | Ensure the join-code flow for minors stays within kid-safe constraints. |
+| 9 | Deps added in 1.1 beyond Section 2 | RECORDED | Required companions of listed libs, not new choices: react-dom (Expo Router web), react-native-url-polyfill (Supabase in RN), react-native-worklets (Reanimated 4 peer), babel-preset-expo + @react-native/jest-preset (Expo/jest-expo build). Toolchain pins for compat: tailwindcss 3.4 (NativeWind 4 needs Tailwind v3), Jest 29 (jest-expo 57), ESLint 9 (eslint-config-expo 57). Repo uses .npmrc legacy-peer-deps for the react/react-dom peer range. |
 
 > When you resolve an item, move it to BUILD_HISTORY.md with the date and reasoning, and update the
 > affected sections above.

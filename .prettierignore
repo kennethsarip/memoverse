@@ -1,0 +1,13 @@
+node_modules/
+.expo/
+dist/
+web-build/
+coverage/
+android/
+ios/
+package-lock.json
+
+# Authored docs: keep hand-formatted, do not auto-reflow tables/lists.
+CLAUDE.md
+README.md
+BUILD_HISTORY.md
