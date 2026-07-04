@@ -12,12 +12,15 @@ itself is unaffected by being a mobile app — only the render/verify step is.
 
 Shape: `package` (no Storybook exists yet).
 
-## Do not sync yet
+## Sync readiness
 
-As of 2026-07-04 the only UI is two scaffolding placeholders
-(`src/components/PlaceholderScreen.tsx`, `src/components/ScreenContainer.tsx`).
-There is no real design system to sync. Wait until the Phase 1.3 UI kit exists
-(VerseCard, WordChip, Button, ProgressRing, first-letter input control).
+As of 2026-07-04 the Phase 1.3 UI kit now exists in `src/components`
+(`VerseCard`, `WordChip`, `FirstLetterInput`, `Button`, `SessionHeader`,
+`SessionCompleteCard`) alongside the earlier scaffolding placeholders. That is a real
+design system worth syncing, but the web-render prerequisites below are still not in
+place, so a sync cannot fidelity-verify these components yet. Set those up first. Note
+`WordChip`/`SessionCompleteCard` use `react-native-reanimated`; the web target must alias
+it (reanimated supports web) or those components will not render in DOM.
 
 ## Prerequisites before a first real sync (all are ADDITIONS; avoid editing existing src/)
 

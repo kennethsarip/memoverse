@@ -351,7 +351,10 @@ group_assignments (
   - Tier 2: about half the words hidden; user types their first letters to reveal.
   - Tier 3: nothing shown; user recalls the whole verse from first letters, including the
     reference (J 3 16).
-- Correct first letter reveals the whole word with a satisfying micro-animation.
+- Input is via the device soft keyboard: a focused, hidden text field captures each
+  keystroke and forwards it to the engine one letter at a time (paste or fast typing is
+  fanned out in order). The correct first letter reveals the whole word with a satisfying
+  micro-animation; a wrong key gives gentle shake/highlight feedback and does not advance.
 - Session ends with a "Session complete" celebration (XP gained, streak, any new badge).
 
 ### 6.3 Spaced repetition
@@ -385,14 +388,6 @@ group_assignments (
 > delete it from this section, so this file stays small and cheap to read.
 
 ### Version 1 — Solo memorization MVP (the whole promise, for individuals)
-
-- 1.3 Session UI
-  - Build VerseCard, WordChip, and the first-letter input control.
-  - Wire the session runner that steps through a verse at its tier, revealing words on correct input with a reanimated micro-animation.
-  - Add gentle incorrect-input feedback (shake/highlight) with no punishment (no hearts, no energy).
-  - Build the "Session complete" screen showing XP, streak, and any new badge (data wired in later phases).
-  - Add accessibility labels and reduced-motion handling.
-  - Checkpoint: a user memorizes a seeded verse end-to-end on a device or simulator.
 
 - 1.4 SRS scheduler (pure logic, TDD)
   - Write failing tests for schedule() covering fail-reset, interval growth (1, then 3, then ease-scaled), and ease clamping to [1.3, 2.7].
@@ -634,7 +629,7 @@ Documentation and token efficiency (keep Claude Code cheap to run)
 | 6 | KJV as second free translation | NICE-TO-HAVE | WEB is default. KJV is public-domain and trivial to add if requested. |
 | 7 | Streak freezes / challenge mode | LATER | Considered for 3.4. |
 | 8 | Group join for under-13 | V2 | Ensure the join-code flow for minors stays within kid-safe constraints. |
-| 9 | Deps added in 1.1 beyond Section 2 | RECORDED | Required companions of listed libs, not new choices: react-dom (Expo Router web), react-native-url-polyfill (Supabase in RN), react-native-worklets (Reanimated 4 peer), babel-preset-expo + @react-native/jest-preset (Expo/jest-expo build). Toolchain pins for compat: tailwindcss 3.4 (NativeWind 4 needs Tailwind v3), Jest 29 (jest-expo 57), ESLint 9 (eslint-config-expo 57). Repo uses .npmrc legacy-peer-deps for the react/react-dom peer range. |
+| 9 | Deps added beyond Section 2 (by phase) | RECORDED | 1.1 required companions of listed libs, not new choices: react-dom (Expo Router web), react-native-url-polyfill (Supabase in RN), react-native-worklets (Reanimated 4 peer), babel-preset-expo + @react-native/jest-preset (Expo/jest-expo build). Toolchain pins for compat: tailwindcss 3.4 (NativeWind 4 needs Tailwind v3), Jest 29 (jest-expo 57), ESLint 9 (eslint-config-expo 57). Repo uses .npmrc legacy-peer-deps for the react/react-dom peer range. 1.3 added test-renderer (dev; @testing-library/react-native 14 peer, replacing the deprecated react-test-renderer). Deviation: 1.3 built animations with reanimated directly and did not use moti (moti stays a Section 2 dep for later phases); a manual jest mock at __mocks__/react-native-reanimated.js stubs the worklets runtime so animated components render in Node. |
 
 > When you resolve an item, move it to BUILD_HISTORY.md with the date and reasoning, and update the
 > affected sections above.

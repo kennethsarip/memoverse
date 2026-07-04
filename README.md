@@ -53,6 +53,7 @@ npm test             # Jest
 ## Project structure
 
 - app/ - Expo Router screens (onboarding, tabs, session)
+- src/components/ - reusable UI (VerseCard, WordChip, FirstLetterInput, Button, session screens)
 - src/domain/ - pure business logic (first-letter engine, SRS scheduler, XP/streaks); fully unit-tested, no I/O
 - src/features/ - feature modules (memorization, srs, gamification, verses, profile)
 - src/data/ - repositories; the only layer that talks to Supabase/SQLite

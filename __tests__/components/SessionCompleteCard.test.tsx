@@ -3,8 +3,8 @@ import { fireEvent, render } from '@testing-library/react-native';
 import { SessionCompleteCard } from '@/components/SessionCompleteCard';
 
 describe('SessionCompleteCard', () => {
-  it('renders the real accuracy and placeholder stats', () => {
-    const { getByText } = render(
+  it('renders the real accuracy and placeholder stats', async () => {
+    const { getByText } = await render(
       <SessionCompleteCard
         accuracy={0.5}
         xpEarned={0}
@@ -19,9 +19,9 @@ describe('SessionCompleteCard', () => {
     expect(getByText('You worked through John 3:16')).toBeTruthy();
   });
 
-  it('fires onContinue when the button is pressed', () => {
+  it('fires onContinue when the button is pressed', async () => {
     const onContinue = jest.fn();
-    const { getByLabelText } = render(
+    const { getByLabelText } = await render(
       <SessionCompleteCard
         accuracy={1}
         xpEarned={0}
@@ -30,12 +30,12 @@ describe('SessionCompleteCard', () => {
         reducedMotion
       />,
     );
-    fireEvent.press(getByLabelText('Continue'));
+    await fireEvent.press(getByLabelText('Continue'));
     expect(onContinue).toHaveBeenCalledTimes(1);
   });
 
-  it('shows a new badge when one is passed', () => {
-    const { getByText } = render(
+  it('shows a new badge when one is passed', async () => {
+    const { getByText } = await render(
       <SessionCompleteCard
         accuracy={1}
         xpEarned={0}

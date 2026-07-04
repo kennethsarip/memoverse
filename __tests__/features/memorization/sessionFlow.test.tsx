@@ -31,8 +31,8 @@ function SessionHarness() {
 }
 
 describe('session flow (tier 3, all hidden)', () => {
-  it('reveals each word as its first letter is typed and completes the verse', () => {
-    const { getByPlaceholderText, getByText, getByTestId, queryByText } = render(
+  it('reveals each word as its first letter is typed and completes the verse', async () => {
+    const { getByPlaceholderText, getByText, getByTestId, queryByText } = await render(
       <SessionHarness />,
     );
     const input = getByPlaceholderText('Tap and type');
@@ -43,7 +43,7 @@ describe('session flow (tier 3, all hidden)', () => {
 
     // Type the first letters: For(f) God(g) John(j) 3(3) 16(1).
     for (const key of ['f', 'g', 'j', '3', '1']) {
-      fireEvent.changeText(input, key);
+      await fireEvent.changeText(input, key);
     }
 
     expect(getByText('For')).toBeTruthy();
@@ -52,11 +52,13 @@ describe('session flow (tier 3, all hidden)', () => {
     expect(getByTestId('status').props.children).toBe('complete');
   });
 
-  it('does not advance on a wrong key', () => {
-    const { getByPlaceholderText, queryByText, getByTestId } = render(<SessionHarness />);
+  it('does not advance on a wrong key', async () => {
+    const { getByPlaceholderText, queryByText, getByTestId } = await render(
+      <SessionHarness />,
+    );
     const input = getByPlaceholderText('Tap and type');
 
-    fireEvent.changeText(input, 'x'); // wrong first letter for 'For'
+    await fireEvent.changeText(input, 'x'); // wrong first letter for 'For'
     expect(queryByText('For')).toBeNull();
     expect(getByTestId('status').props.children).toBe('active');
   });

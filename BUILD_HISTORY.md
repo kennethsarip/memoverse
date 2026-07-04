@@ -16,6 +16,22 @@ Entry format:
 
 ---
 
+## 1.3 Session UI — 2026-07-04
+
+Built the memorization session UI on top of the 1.2 engine. Components in src/components:
+WordChip (masked placeholder plus reveal pop), VerseCard (wrapping flow of chips),
+FirstLetterInput (the keyboard control: a focused hidden TextInput that captures each
+keystroke, resets to empty, and fans batched input out one letter at a time), Button,
+SessionHeader (reference, tier pill, progress bar), and SessionCompleteCard (real accuracy
+from the engine; XP/streak/badge are placeholders wired in 1.7). Pure session runner in
+src/features/memorization (startVerseAttempt/applyKey/attemptAccuracy/isRevealed) drives
+reveal-on-correct and no-advance-on-wrong with gentle shake feedback (no hearts/energy).
+Reduced-motion honored throughout; accessibility labels on all interactive elements. app/session
+screen wired from the Home daily-session card. Deviations (see CLAUDE.md Section 12 item 9):
+used reanimated directly (no moti) and added test-renderer for RNTL 14; keyboard-input mechanism
+documented in Section 6.2. 60 tests pass (26 new), 100% coverage on domain/feature logic;
+typecheck and lint green. On-device end-to-end demo is the user's to run (simulator not launched here).
+
 ## 1.2 First-letter engine — 2026-07-04
 
 Built the pure first-letter memorization engine in src/domain/firstLetter (TDD, tests
