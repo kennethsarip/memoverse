@@ -128,6 +128,7 @@ npm run lint                        # ESLint
 npm run format                      # Prettier --write
 npm test                            # Jest unit/integration tests
 npm run test:watch                  # Jest in watch mode
+npm run test:coverage               # Jest with coverage (enforces the domain 90% gate; runs in CI)
 
 # Database (Supabase)
 npx supabase start                  # Local Postgres + Studio (Docker)
@@ -384,14 +385,6 @@ group_assignments (
 > delete it from this section, so this file stays small and cheap to read.
 
 ### Version 1 — Solo memorization MVP (the whole promise, for individuals)
-
-- 1.2 First-letter engine (pure logic, TDD)
-  - Write failing unit tests first for tokenize(), covering John 3:16, punctuation, quotes, numbers in the reference, single-word, and empty verses.
-  - Implement tokenize(verseText, reference) returning ordered Token[] with firstLetter and isReference.
-  - Implement isCorrectFirstLetter() (case-insensitive letters; literal digits; ignore leading punctuation/quotes).
-  - Implement hiddenIndexesForTier() for tiers 1/2/3 (all shown, about half, none), deterministic given a seed.
-  - Implement computeAccuracy(). Keep everything in src/domain with no I/O and no Date usage.
-  - Checkpoint: the full engine test suite passes at 90 percent or higher coverage.
 
 - 1.3 Session UI
   - Build VerseCard, WordChip, and the first-letter input control.

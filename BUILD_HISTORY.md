@@ -16,6 +16,18 @@ Entry format:
 
 ---
 
+## 1.2 First-letter engine — 2026-07-04
+
+Built the pure first-letter memorization engine in src/domain/firstLetter (TDD, tests
+written first): tokenize() splits a verse plus its reference into ordered Token[] (verse
+words, then reference tokens like John/3/16, punctuation attached), deriveFirstLetter()
+lowercases the first letter and treats digits literally, isCorrectFirstLetter() matches
+case-insensitively and ignores leading punctuation, hiddenIndexesForTier() returns
+none/about-half/all per tier (tier 2 seeded and deterministic via a mulberry32 PRNG), and
+computeAccuracy() is clamped and divide-by-zero safe. No I/O, no Date. 34 tests pass at
+100% domain coverage. Wired the Section 9 gate: added npm run test:coverage plus a
+jest coverageThreshold of 90% on ./src/domain, and pointed CI at test:coverage.
+
 ## 1.1 Foundations — 2026-07-04
 
 Bootstrapped the Expo (SDK 57) + TypeScript app: Expo Router with a (tabs) layout
