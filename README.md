@@ -1,11 +1,12 @@
-# MemoVerse
+# Fount
 
 A free, modern, gamified Bible-memory app for iOS and Android. Think "Duolingo for
 Scripture memorization." Memorize verses with the first-letter technique, keep them for
 the long term with spaced repetition, and stay motivated with XP, streaks, and badges.
 
-MemoVerse is 100 percent free with no verse cap and no paywall, built for independent
-learners as well as youth ministries and grade schools (for example AWANA).
+Fount is 100 percent free with no verse cap and no paywall, built for teenagers and
+younger adults memorizing on their own (kids-mode covers younger users). Group features
+for youth ministries and grade schools come in v2.
 
 For the full product and engineering spec, read CLAUDE.md. For shipped milestones, see
 BUILD_HISTORY.md.

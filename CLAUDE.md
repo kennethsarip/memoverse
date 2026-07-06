@@ -1,6 +1,6 @@
-# CLAUDE.md — MemoVerse
+# CLAUDE.md — Fount
 
-> Product and engineering brief for building MemoVerse with Claude Code.
+> Product and engineering brief for building Fount with Claude Code.
 > This file is the single source of truth. Read it fully before writing any code.
 > When a decision here conflicts with your assumptions, this file wins. If this
 > file is silent on something, check Section 12 (Open Decisions) before inventing an answer.
@@ -9,12 +9,12 @@
 
 ## 1. Scope — What This App Is
 
-MemoVerse is a free, modern, gamified Bible-memory app for phones (iOS + Android).
+Fount is a free, modern, gamified Bible-memory app for phones (iOS + Android).
 Think "Duolingo for Scripture memorization."
 
 The problem it solves: existing Bible-memory apps look dated and paywall users. The
 reference app charges about 4 dollars per month after only 50 imported verses. That gate
-is the exact thing MemoVerse refuses to do.
+is the exact thing Fount refuses to do.
 
 Core promise (never break these):
 - 100 percent free. No paywall. No verse cap. Ever. Core memorization is unlimited for everyone.
@@ -32,14 +32,27 @@ Retention engine: spaced repetition (SRS) schedules each verse for review at exp
 intervals so verses move into long-term memory (active recall).
 
 Audience (who we build for):
-- Independent users: a teen, a kid, or an adult memorizing on their own (the v1 priority).
-- Youth ministries and grade schools: AWANA (Sparks and T&T), Sunday school, Christian-school
-  classrooms. Group and leader features come in v2 (the schema is prepared in v1).
+- v1 target: teenagers and younger adults memorizing on their own. This sharpened focus drives
+  the brand and UX today.
+- Also served solo: kids (via kids-mode, Section 6.1) and older adults.
+- Youth ministries and grade schools (AWANA Sparks/T&T, Sunday school, Christian-school
+  classrooms) remain a v2 audience via groups/leader features (schema prepared in v1); they are
+  no longer a current positioning driver.
 
-Non-goals (what MemoVerse is NOT):
+Non-goals (what Fount is NOT):
 - Not a full Bible reader, study-notes, or commentary app.
 - Not a social network. Not an ad platform. Not a data-collection business.
 - Not a paywalled or freemium-with-a-cap product.
+
+Brand and UI direction (locked 2026-07-06):
+- Name: Fount (living-water imagery, e.g. "Come Thou Fount"). Signals the free, life-giving promise.
+- Look: living-water cyan (~#1497D8) as the single accent on a clean neutral base, Poppins type,
+  Georgia for scripture body text, calm/balanced tone (not Duolingo-loud). Full light/dark. Extra
+  color themes ship later as an unlock (Section 12 item 4).
+- Primary navigation (4 tabs): Home, Verses, Bible, Profile. The Library screen (Phase 1.5) is the
+  Verses tab; progress stats (Phase 1.9) live under Profile; there is no separate Review tab (due
+  verses surface at the top of Verses).
+- Session stages are interval-driven (Section 8.3).
 
 ---
 
@@ -75,7 +88,7 @@ Note: do not add a dependency that is not listed here without recording it in Se
 memoverse/
   app/                       Expo Router routes (screens)
     (onboarding)/            Age gate, welcome, first-verse taster (guest-first)
-    (tabs)/                  Home/session, Library, Progress, Profile
+    (tabs)/                  Home/session, Verses, Bible, Profile
     session/                 Active memorization session flow
     _layout.tsx
   src/
@@ -389,51 +402,92 @@ group_assignments (
 
 ### Version 1 — Solo memorization MVP (the whole promise, for individuals)
 
+> Phases 1.5 onward build the locked mockup into the app. Before building any screen, Claude Code
+> must open and reference the interactive prototype as the visual source of truth for layout, spacing,
+> states, and interactions:
+> https://claude.ai/code/artifact/11cb1017-dc71-49c1-aa8e-f811ddd4d4e9?org=4a1fb13b-bf67-41b8-83f3-fb7c20f093d7
+> Supporting references: the "Brand and UI direction" block in Section 1 and the ui-design-decisions
+> memory. Every UI phase must match the prototype's living-water theme, Poppins type (serif for
+> scripture body), and the frosted 4-tab nav (Home, Verses, Bible, Profile), and pull only from
+> src/theme tokens (no hard-coded styles). Build one screen per phase so each ends at a visible,
+> demoable checkpoint with typecheck, lint, and tests green.
+
 - 1.4 SRS scheduler (pure logic, TDD)
   - Write failing tests for schedule() covering fail-reset, interval growth (1, then 3, then ease-scaled), and ease clamping to [1.3, 2.7].
   - Implement the SM-2 variant per Section 8.2 with an injected clock (never call Date.now() inside domain code).
-  - Implement tier promotion (Section 8.3) and mastery detection.
+  - Implement the interval->stage mapping and mastery detection per Section 8.3.
   - Implement buildDueQueue(now, verses) returning due reviews + a capped number of new verses for a session.
-  - Checkpoint: scheduler tests pass; simulated multi-day runs resurface verses correctly.
+  - Checkpoint: scheduler tests pass; simulated multi-day runs resurface verses and advance stages correctly.
 
-- 1.5 Verses and library
-  - Build the Library screen listing curated packs (packs + pack_items) with cover, title, category.
-  - Implement "start pack": create user_verses rows plus initial verse_progress.
-  - Build "Add custom verse": pick a reference from scripture_refs OR paste free text; store as source='custom'. No cap.
-  - Add validation and clear, user-safe error messages for custom input.
-  - Put all reads/writes in src/data repositories; components never touch Supabase directly.
-  - Checkpoint: add a custom verse and start a curated pack; both enter the SRS due queue.
+- 1.5 Design system and app shell (living-water UI kit)
+  - Load Poppins (400/500/700/800) as the app font and a serif (Georgia/system) for scripture body text; expose both via src/theme typography tokens.
+  - Reconcile src/theme tokens to the locked palette (living-water cyan primary, neutral base, accent for flame/XP) for light and dark; add any missing semantic tokens the mockup uses (primary-soft, faint ink, surfaces).
+  - Build/confirm the core primitives in src/components to the mockup: Button, Card, Chip/Pill, SectionHeader, ListRow, ProgressRing, animated StreakFlame (reduced-motion aware); WordChip/VerseCard already exist from 1.3.
+  - Build the frosted floating tab bar and the 4-tab Expo Router layout (Home, Verses, Bible, Profile); rename the scaffold routes (Library/Progress removed), no separate Review tab.
+  - Wire the in-app light/dark toggle with system-follow.
+  - Checkpoint: the themed shell renders all four tabs navigable in light and dark, fonts load, and the tab bar/chrome match the mockup.
 
-- 1.6 Accounts and guest-to-profile
-  - Implement guest mode: local profile and local progress persistence (SQLite/MMKV).
-  - Build the age gate (birth year) that sets age_band and kids_mode.
-  - Implement Supabase Auth for username+password (no email), Apple, Google, and email+password.
+- 1.6 Verses screen, library, and add-verse (data core)
+  - Build src/data repositories for packs/pack_items, scripture_refs, and verse_texts (WEB), plus user_verses and verse_progress; read WEB text through the repository (never Supabase directly from components).
+  - Build the Verses collection screen: filter chips (All/Learning/Reviewing/Mastered), verse rows (reference in Poppins, snippet in serif, status), overdue verses badged and sorted to top.
+  - Build the add-verse FAB and sheet: start a curated pack; add a custom verse (pick a scripture_ref OR paste free text, source='custom') with validation and user-safe errors. No cap.
+  - "Start pack" / "add verse" creates user_verses + initial verse_progress (stage 1, due today) into the SRS queue.
+  - Checkpoint: add a custom verse and start a pack; both appear in Verses and enter the due queue; the screen matches the mockup.
+
+- 1.7 Home screen (daily hub)
+  - Build Home to the mockup: Fount logo/wordmark + theme toggle, greeting, streak card with the animated flame and day-of-week strip, Level/XP card, the calm "verses to review -> Start review" CTA (routes to Verses, surfaces the overdue count), stats row, continue-learning cards (tap -> session), and verse of the day (serif).
+  - Consume the 1.4 due queue and 1.6 repositories; gamification values (XP/streak) use placeholders until 1.12.
+  - Reduced-motion variant for the flame; accessibility labels; tokens only.
+  - Checkpoint: Home matches the mockup in light/dark, the CTA routes to Verses with a real overdue count, and a continue card launches the session.
+
+- 1.8 Bible verse-picker screen
+  - Build the Bible tab as a picker (not a reader): a top-to-bottom list of full book names with a single grey rule dividing Old and New Testament, a chapter number grid, and a continuous passage view (flowing text, superscript verse numbers).
+  - Tap to select a verse or range -> "Add to my verses" (creates user_verses + verse_progress via the 1.6 repositories).
+  - Read scripture_refs/verse_texts through repositories; show a graceful empty/coming-soon state for refs not yet seeded.
+  - Checkpoint: from the Bible tab, select John 3:16 and it is added to Verses and enters the due queue.
+
+- 1.9 Session screen (full port and polish)
+  - Compose the full designed session from the 1.3 components: the linked 1-2-3 stage stepper (Type it / Memorize it / Master it) reflecting the verse's interval-driven stage (Section 8.3); hidden blanks that reserve exact word width (no layout shift); a blinking caret overlay; one-shot keystroke feedback (correct = ink, wrong = red shake, no green in words).
+  - Accuracy pill (green >=90%, red below); free-practice mode launched from Verses is no-stakes (small XP, never touches SRS or streak).
+  - Between-stage dashboard (Repeat / Continue) gated at >=90%; a session-complete celebration (XP, streak, any new badge) with gamification placeholders until 1.12.
+  - On completion, assign a grade, call schedule() (1.4) to set the next due date and persist interval/stage, and append a review_event.
+  - Checkpoint: run a verse through the stages; SRS state advances per Sections 8.2/8.3; the celebration shows; reduced motion honored.
+
+- 1.10 Onboarding (guest-first taster and age gate)
+  - Build the guest-first taster: a fresh install opens straight into memorizing one short verse, no account (per the onboarding mockup).
+  - Build the age gate (birth year, neutral phrasing) that sets age_band and kids_mode; under_13 enters kids-mode (minimal data, nothing personalized).
+  - Persist the guest profile and progress locally (SQLite/MMKV); show a gentle "create a profile to save your progress" prompt (sign-up deferred to 1.11).
+  - Checkpoint: a fresh install lands in the taster, completes one verse as a guest, sets an age band, and progress survives a relaunch.
+
+- 1.11 Accounts and guest-to-profile
+  - Implement Supabase Auth for username+password (no email), Apple, Google, and email+password; write the profiles row (username, age_band, kids_mode, timezone).
   - Implement guest-to-profile migration on first sign-up (move local user_verses, verse_progress, daily_activity into the account).
-  - Add an integration test proving RLS blocks a user from reading another user's rows.
-  - Checkpoint: sign up via all four methods; guest progress migrates intact.
+  - Add an integration test proving RLS blocks a user from reading another user's rows (local Supabase).
+  - Checkpoint: sign up via all four methods; guest progress migrates intact; the RLS test passes.
 
-- 1.7 Gamification
-  - Implement XP calculation (Section 8.4) awarded per verse attempt and on session completion.
-  - Implement streak logic on the user's local calendar (continue, reset-to-1, break-to-0), updating current and longest streak.
-  - Write daily_activity rollups.
+- 1.12 Gamification (logic and UI moments)
+  - Implement XP (Section 8.4) per verse attempt and the session-complete bonus; streak logic on the user's local calendar (continue, reset-to-1, break-to-0) updating current and longest; write daily_activity rollups.
   - Implement badge evaluation after each session against badges.criteria_type/value; write user_badges.
-  - Build UI: XP counter, streak indicator, badge unlock celebration.
-  - Checkpoint: streak increments across simulated days; a badge unlocks and displays.
+  - Wire the mockup UI moments to real values: XP counter and float pop on the XP stat, the streak indicator/flame, and the badge-unlock celebration (replacing the Home/Session placeholders).
+  - Checkpoint: streak increments across simulated days; XP math matches Section 8.4; a badge unlocks and displays.
 
-- 1.8 Offline, notifications, and audio
+- 1.13 Profile screen and progress stats
+  - Build the Profile screen to the mockup: avatar, level/XP, stats, badges grid, and settings (dark-mode toggle, notifications opt-in, account).
+  - Build the progress area: verses mastered, streak calendar, and basic accuracy-over-time, all from repositories.
+  - Checkpoint: Profile matches the mockup and the stats reflect real user_verses/verse_progress/daily_activity.
+
+- 1.14 Offline, notifications, and audio
   - Cache WEB verse text + user verses + verse_progress in SQLite; read-through so sessions run fully offline.
   - Implement sync: queue review_events offline and reconcile on reconnect (append-only events; last-write-wins on verse_progress).
   - Implement daily reminder notifications via expo-notifications with opt-in and kid-safe quiet hours.
   - Implement "Listen to the verse" TTS via expo-speech.
   - Checkpoint: complete a full session in airplane mode; a reminder fires; a verse reads aloud; data syncs on reconnect.
 
-- 1.9 Polish, basic progress stats, and store prep
-  - Build the Progress dashboard: verses mastered, streak calendar, accuracy over time (basic).
-  - Add empty states, error states, and loading skeletons throughout.
-  - Run an accessibility pass (labels, hit targets 44px or larger, contrast, reduced motion).
-  - Configure eas.json profiles and produce a production build.
-  - Render the required translation attribution text.
-  - Checkpoint: an internal TestFlight/Play build installs and runs clean.
+- 1.15 Accessibility, states, and store prep
+  - Run an accessibility pass across every screen: labels, hit targets 44px or larger, contrast in light and dark, reduced motion.
+  - Add empty, error, and loading-skeleton states throughout.
+  - Render the required translation attribution text; configure eas.json profiles and produce a production build; prep the data-safety/COPPA review (Section 12 item 3).
+  - Checkpoint: an internal TestFlight/Play build installs and runs clean end to end.
 
 ### Version 2 — Community and licensed translations
 
@@ -523,9 +577,19 @@ function schedule(state: SrsState, grade: Grade): SrsState & { dueInDays: number
 - Ease update: EF' = clamp(EF + (0.1 - (5-grade)*(0.08 + (5-grade)*0.02)), 1.3, 2.7).
 - dueInDays = intervalDays.
 
-### 8.3 Difficulty-tier promotion and mastery
-- Promote tier (1 to 2 to 3) after 2 consecutive attempts at the current tier with grade >= 4.
+### 8.3 Difficulty-tier (session stage) mapping and mastery
+Tiers 1/2/3 map to the session stepper: 1 Type it (all words shown), 2 Memorize it (about half),
+3 Master it (none shown). The tier is derived from the SRS interval, not a separate consecutive-
+grade counter, so a verse's stage always tracks how well it is retained:
+- Tier 1 "Type it": a new or just-relearned verse (repetitions == 0).
+- Tier 2 "Memorize it": intervalDays >= 1 and < 7.
+- Tier 3 "Master it": intervalDays >= 7.
 - Mastered when: tier == 3 AND intervalDays >= 21 AND last grade >= 4.
+Within one session the learner may drill up through the shown stages as practice; the
+90%-accuracy-to-advance gate (see the locked UI direction in Section 1) is a per-session learning
+aid and does not change the persisted tier, which only moves when schedule() (Section 8.2) changes
+the interval. This reconciles the interval->stage model from the locked prototype design and
+supersedes the earlier "promote after 2 consecutive grade >= 4 attempts" rule.
 
 ### 8.4 XP, streaks, badges
 ```
@@ -622,9 +686,9 @@ Documentation and token efficiency (keep Claude Code cheap to run)
 | # | Decision | Status | Notes |
 |---|---|---|---|
 | 1 | NIV/ESV licensing | PLANNED, not a hard blocker | NIV = Biblica/Zondervan; ESV = Crossway. Both licensed. Preferred: an official free-use API tier; worst case the owner self-funds the license. Enable the translation only once the license is in place. Do not block v1 on this. |
-| 2 | Funding path | DECIDED (donations/ministry), not built | Optional "Support MemoVerse" donations plus ministry/foundation sponsorship. Ship the donation flow in 2.5. Never a paywall. |
+| 2 | Funding path | DECIDED (donations/ministry), not built | Optional "Support Fount" donations plus ministry/foundation sponsorship. Ship the donation flow in 2.5. Never a paywall. |
 | 3 | COPPA / consent | DIRECTION SET, review before launch | Applies only to under-13 users. Because we collect no personal info from under-13 users (guest mode, no email, no ads, no trackers, no persistent tracking identifiers), the verifiable-parental-consent requirement is largely avoided. Before public launch / store submission, get a privacy/legal or compliance-service review of the privacy policy and data flows. Also check Apple Kids Category and Google Play Designed for Families rules. |
-| 4 | Mascot / branding | DEFERRED | UI leaves room for an optional mascot. Decide character vs clean-brand in 3.3. Aesthetic is bright, playful, gamified for now. |
+| 4 | Mascot / branding | NAME + LOOK DECIDED (2026-07-06); mascot deferred | Name: Fount. Look: living-water cyan (~#1497D8) single accent on a clean neutral base, Poppins type, Georgia scripture text, balanced tone; extra color themes ship later as an unlock. Optional mascot still deferred to 3.3. See BUILD_HISTORY. |
 | 5 | Analytics tool | OPEN | Minimal privacy-first (PostHog EU/self-host) or none in MVP. Decide before 1.9. Must be anonymized and kid-safe. |
 | 6 | KJV as second free translation | NICE-TO-HAVE | WEB is default. KJV is public-domain and trivial to add if requested. |
 | 7 | Streak freezes / challenge mode | LATER | Considered for 3.4. |

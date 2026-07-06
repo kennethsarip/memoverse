@@ -4,24 +4,24 @@ import type { ConfigContext, ExpoConfig } from 'expo/config';
 // process.env.EXPO_PUBLIC_* (see src/lib/supabase.ts); they are not embedded here.
 export default ({ config }: ConfigContext): ExpoConfig => ({
   ...config,
-  name: 'MemoVerse',
-  slug: 'memoverse',
-  scheme: 'memoverse',
+  name: 'Fount',
+  slug: 'fount',
+  scheme: 'fount',
   version: '0.1.0',
   orientation: 'portrait',
   icon: './assets/icon.png',
   userInterfaceStyle: 'automatic', // support light and dark
   ios: {
     supportsTablet: true,
-    bundleIdentifier: 'app.memoverse',
+    bundleIdentifier: 'app.fount',
   },
   android: {
-    package: 'app.memoverse',
+    package: 'app.fount',
     adaptiveIcon: {
       foregroundImage: './assets/android-icon-foreground.png',
       backgroundImage: './assets/android-icon-background.png',
       monochromeImage: './assets/android-icon-monochrome.png',
-      backgroundColor: '#EEF0FE',
+      backgroundColor: '#E9F6FD',
     },
     predictiveBackGestureEnabled: false,
   },

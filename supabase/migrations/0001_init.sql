@@ -1,4 +1,4 @@
--- MemoVerse initial schema (CLAUDE.md Section 5).
+-- Fount initial schema (CLAUDE.md Section 5).
 -- Principles: translation-independent references, per-user progress, groups modeled
 -- now (UI in v2), and Row-Level Security on every table (default deny).
 

@@ -10,7 +10,7 @@ export default function HomeScreen() {
 
   return (
     <ScreenContainer>
-      <Text style={{ ...typography.display, color: colors.textPrimary }}>MemoVerse</Text>
+      <Text style={{ ...typography.display, color: colors.textPrimary }}>Fount</Text>
       <Text
         style={{
           ...typography.body,

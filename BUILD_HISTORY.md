@@ -1,4 +1,4 @@
-# BUILD_HISTORY.md — MemoVerse
+# BUILD_HISTORY.md — Fount
 
 Append-only log of shipped milestones. This file is a compact memory for Claude Code to
 look back on for context. Keep entries concise (1-2 lines each, longer only for genuinely
@@ -15,6 +15,29 @@ Entry format:
   One to two sentences: what shipped and the key outcome. Note any important deviation from the plan.
 
 ---
+
+## Planning: v1 build plan expanded for the mockup UI — 2026-07-06
+
+Restructured CLAUDE.md Section 7 Version 1 into screen-oriented phases (now 1.4-1.15) so the locked
+prototype UI gets built explicitly, since none of the mockup UI is in the codebase yet. Added a
+design-system/app-shell phase (1.5) and one phase per mockup screen (Verses 1.6, Home 1.7, Bible 1.8,
+Session polish 1.9, Profile 1.13) plus a guest-first onboarding phase (1.10), folding the prior
+functional phases (verses/library, accounts, gamification, offline, store prep) into the new
+numbering. Plan only; no app code shipped this change.
+
+## Branding: renamed to Fount, visual identity locked — 2026-07-06
+
+Locked the product name Fount (off the working name "MemoVerse", which collides with the
+existing Memverse Bible-memory app and an older MemoVerse desktop tool; the "vers-" naming
+space is saturated). Locked the look: living-water cyan (~#1497D8) as the single default accent
+on a clean neutral base, Poppins type, Georgia for scripture body text, balanced warm-but-grounded
+tone; extra color themes deferred to a later unlock. Sharpened the v1 audience to teenagers and
+younger adults (youth ministry/AWANA stays a v2 group feature, not a current positioning driver).
+Reconciled session stages to be interval-driven (CLAUDE.md Section 8.3, superseding the earlier
+consecutive-grade promotion rule). Applied the rename to app.config, package.json, and the RN
+screens, and swapped the RN brand palette from the old purple to living-water cyan; the on-disk
+repo directory and local Supabase project id still read "memoverse" (cosmetic, rename deferred).
+Resolves Section 12 item 4 (name + look).
 
 ## 1.3 Session UI — 2026-07-04
 

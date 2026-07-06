@@ -1,4 +1,4 @@
-# design-sync notes — MemoVerse
+# design-sync notes — Fount
 
 Persistent guidance for future `/design-sync` runs on this repo. Read before syncing.
 
