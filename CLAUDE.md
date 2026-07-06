@@ -412,13 +412,6 @@ group_assignments (
 > src/theme tokens (no hard-coded styles). Build one screen per phase so each ends at a visible,
 > demoable checkpoint with typecheck, lint, and tests green.
 
-- 1.4 SRS scheduler (pure logic, TDD)
-  - Write failing tests for schedule() covering fail-reset, interval growth (1, then 3, then ease-scaled), and ease clamping to [1.3, 2.7].
-  - Implement the SM-2 variant per Section 8.2 with an injected clock (never call Date.now() inside domain code).
-  - Implement the interval->stage mapping and mastery detection per Section 8.3.
-  - Implement buildDueQueue(now, verses) returning due reviews + a capped number of new verses for a session.
-  - Checkpoint: scheduler tests pass; simulated multi-day runs resurface verses and advance stages correctly.
-
 - 1.5 Design system and app shell (living-water UI kit)
   - Load Poppins (400/500/700/800) as the app font and a serif (Georgia/system) for scripture body text; expose both via src/theme typography tokens.
   - Reconcile src/theme tokens to the locked palette (living-water cyan primary, neutral base, accent for flame/XP) for light and dark; add any missing semantic tokens the mockup uses (primary-soft, faint ink, surfaces).

@@ -16,6 +16,17 @@ Entry format:
 
 ---
 
+## 1.4 SRS scheduler — 2026-07-06
+
+Built the pure spaced-repetition scheduler in src/domain/srs (TDD, tests first). schedule() is the
+SM-2 variant from Section 8.2: fail (grade < 3) resets repetitions to 0 and relearns tomorrow, pass
+grows the interval 1/3/round(prev*ease) using the updated ease, and ease clamps to [1.3, 2.7].
+tierForState()/isMastered() derive the session stage from the interval per Section 8.3 (Tier 1 new,
+2 for interval 1-6d, 3 at 7d+; mastered at Tier 3 with interval >= 21 and last grade >= 4).
+buildDueQueue(now, verses, limit) takes an injected 'YYYY-MM-DD' now (no Date.now()) and returns due
+reviews (most-overdue first, id tie-break) plus up to DEFAULT_NEW_VERSES_PER_SESSION (3) new verses.
+92 tests pass (32 new) at 100% domain coverage; typecheck and lint green.
+
 ## Planning: v1 build plan expanded for the mockup UI — 2026-07-06
 
 Restructured CLAUDE.md Section 7 Version 1 into screen-oriented phases (now 1.4-1.15) so the locked
