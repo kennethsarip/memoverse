@@ -2,7 +2,7 @@ import { Pressable, Text } from 'react-native';
 
 import { radii, spacing, typography, useTheme } from '@/theme';
 
-type ButtonVariant = 'primary' | 'secondary';
+type ButtonVariant = 'primary' | 'ghost';
 
 interface ButtonProps {
   title: string;
@@ -40,7 +40,7 @@ export function Button({
         alignItems: 'center',
         paddingHorizontal: spacing.xl,
         paddingVertical: spacing.md,
-        borderRadius: radii.full,
+        borderRadius: radii.md,
         backgroundColor: isPrimary ? colors.primary : colors.surfaceMuted,
         borderWidth: isPrimary ? 0 : 1,
         borderColor: colors.border,

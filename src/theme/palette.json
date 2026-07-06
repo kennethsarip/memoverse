@@ -4,37 +4,61 @@
     "100": "#C9EBFB",
     "200": "#93D7F6",
     "300": "#5CC0EE",
-    "400": "#2FA9E3",
+    "400": "#3FB6F0",
     "500": "#1497D8",
-    "600": "#0F7CB4",
+    "600": "#0F82BE",
     "700": "#0C6291",
     "800": "#0C4E72",
     "900": "#0B3F5C"
   },
-  "accent": {
-    "50": "#FFF6E5",
-    "100": "#FFE9BF",
-    "200": "#FFD68A",
-    "300": "#FFC24D",
-    "400": "#FFB020",
-    "500": "#F59A00",
-    "600": "#CC7E00",
-    "700": "#9C6000"
+  "streak": {
+    "light": "#F5A524",
+    "lightSoft": "#FCEBCB",
+    "dark": "#FBBB4E",
+    "darkSoft": "#3A2E16"
   },
   "success": {
-    "100": "#DCFCE7",
-    "500": "#22C55E",
-    "600": "#16A34A"
+    "light": "#12B27E",
+    "lightSoft": "#DDF5EC",
+    "dark": "#2FD29A",
+    "darkSoft": "#0C3A2C"
+  },
+  "danger": {
+    "light": "#E5484D",
+    "lightSoft": "#FCE8E9",
+    "dark": "#FF6B70",
+    "darkSoft": "#3A1E22"
   },
   "warning": {
     "100": "#FEF3C7",
     "500": "#F59E0B",
     "600": "#D97706"
   },
-  "danger": {
-    "100": "#FEE2E2",
-    "500": "#EF4444",
-    "600": "#DC2626"
+  "living": {
+    "light": {
+      "page": "#E9F6FD",
+      "app": "#FFFFFF",
+      "surface2": "#E4F3FB",
+      "ink": "#14313F",
+      "inkSoft": "#587585",
+      "inkFaint": "#92AAB8",
+      "inkUpcoming": "#BDD4DF",
+      "primarySoft": "#DCF1FB",
+      "primaryStrong": "#0F82BE",
+      "line": "#E0EEF6"
+    },
+    "dark": {
+      "page": "#06131C",
+      "app": "#0B1D28",
+      "surface2": "#143040",
+      "ink": "#E7F4FB",
+      "inkSoft": "#93AFBF",
+      "inkFaint": "#5E7D8F",
+      "inkUpcoming": "#385665",
+      "primarySoft": "#0F3346",
+      "primaryStrong": "#6FCBFF",
+      "line": "#1B3644"
+    }
   },
   "neutral": {
     "0": "#FFFFFF",

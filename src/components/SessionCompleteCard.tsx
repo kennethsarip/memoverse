@@ -147,7 +147,7 @@ export function SessionCompleteCard({
             width: '100%',
             padding: spacing.lg,
             borderRadius: radii.lg,
-            backgroundColor: colors.accent,
+            backgroundColor: colors.primarySoft,
             alignItems: 'center',
           }}
         >

@@ -16,6 +16,27 @@ Entry format:
 
 ---
 
+## 1.5 Design system and app shell — 2026-07-06
+
+Built the living-water UI kit from the locked prototype (fetched its live CSS/SVG source for
+exact hex values, tab icon paths, and the flame gradient). Reconciled src/theme/tokens.ts to the
+palette (it had been mid-migrated to the living-water palette in a prior session, leaving it and
+tailwind.config.js referencing a removed `accent` key): ThemeColors now exposes page/surface/
+surface2/ink/inkSoft/inkFaint/inkUpcoming/primarySoft/primaryStrong/streak/success/danger per
+scheme, plus an expanded radii scale (chip/button/card/bar/sheet) and Poppins (400/500/700/800)
++ Georgia typography tokens. Added a zustand theme-mode store (light/dark/system) wired through
+useTheme(), with a ThemeToggle control on Home. Built Card, Chip, SectionHeader, ListRow,
+ProgressRing (animated via reanimated + react-native-svg), and StreakFlame (exact traced path/
+gradient, simplified to one looped scale/rotate flicker instead of the prototype's two
+counter-animated layers) in src/components; updated Button to the mockup's 14px radius and
+ghost/primary variants. Rebuilt the tab layout as a floating frosted bar (expo-blur BlurView +
+translucent surface tint, matching the prototype's blur/radius/shadow exactly) with hand-drawn
+SVG icons for Home/Verses/Bible/Profile (no icon-library dependency). Renamed routes to the
+locked nav (library.tsx -> verses.tsx, added bible.tsx, removed progress.tsx; progress stats move
+under Profile in 1.13). Typecheck, lint, and all 92 tests green. Verified web bundling only
+(react-native-web is not installed, as .design-sync/NOTES.md flagged); the on-device/simulator
+demo is the user's to run, consistent with 1.3.
+
 ## 1.4 SRS scheduler — 2026-07-06
 
 Built the pure spaced-repetition scheduler in src/domain/srs (TDD, tests first). schedule() is the

@@ -1,7 +1,8 @@
 import { useRouter } from 'expo-router';
-import { Pressable, Text } from 'react-native';
+import { Pressable, Text, View } from 'react-native';
 
 import { ScreenContainer } from '@/components/ScreenContainer';
+import { ThemeToggle } from '@/components/ThemeToggle';
 import { radii, spacing, typography, useTheme } from '@/theme';
 
 export default function HomeScreen() {
@@ -10,7 +11,16 @@ export default function HomeScreen() {
 
   return (
     <ScreenContainer>
-      <Text style={{ ...typography.display, color: colors.textPrimary }}>Fount</Text>
+      <View
+        style={{
+          flexDirection: 'row',
+          alignItems: 'flex-start',
+          justifyContent: 'space-between',
+        }}
+      >
+        <Text style={{ ...typography.display, color: colors.textPrimary }}>Fount</Text>
+        <ThemeToggle />
+      </View>
       <Text
         style={{
           ...typography.body,
@@ -28,7 +38,7 @@ export default function HomeScreen() {
         style={({ pressed }) => ({
           marginTop: spacing.xl,
           backgroundColor: colors.primary,
-          borderRadius: radii.xl,
+          borderRadius: radii.card,
           padding: spacing.xl,
           opacity: pressed ? 0.9 : 1,
         })}

@@ -25,7 +25,7 @@ export function VerseCard({ attempt, shakeSignal, reducedMotion }: VerseCardProp
       accessibilityRole="text"
       style={{
         backgroundColor: colors.surface,
-        borderRadius: radii.xl,
+        borderRadius: radii.card,
         borderWidth: 1,
         borderColor: colors.border,
         padding: spacing.xl,

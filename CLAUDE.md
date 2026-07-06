@@ -412,14 +412,6 @@ group_assignments (
 > src/theme tokens (no hard-coded styles). Build one screen per phase so each ends at a visible,
 > demoable checkpoint with typecheck, lint, and tests green.
 
-- 1.5 Design system and app shell (living-water UI kit)
-  - Load Poppins (400/500/700/800) as the app font and a serif (Georgia/system) for scripture body text; expose both via src/theme typography tokens.
-  - Reconcile src/theme tokens to the locked palette (living-water cyan primary, neutral base, accent for flame/XP) for light and dark; add any missing semantic tokens the mockup uses (primary-soft, faint ink, surfaces).
-  - Build/confirm the core primitives in src/components to the mockup: Button, Card, Chip/Pill, SectionHeader, ListRow, ProgressRing, animated StreakFlame (reduced-motion aware); WordChip/VerseCard already exist from 1.3.
-  - Build the frosted floating tab bar and the 4-tab Expo Router layout (Home, Verses, Bible, Profile); rename the scaffold routes (Library/Progress removed), no separate Review tab.
-  - Wire the in-app light/dark toggle with system-follow.
-  - Checkpoint: the themed shell renders all four tabs navigable in light and dark, fonts load, and the tab bar/chrome match the mockup.
-
 - 1.6 Verses screen, library, and add-verse (data core)
   - Build src/data repositories for packs/pack_items, scripture_refs, and verse_texts (WEB), plus user_verses and verse_progress; read WEB text through the repository (never Supabase directly from components).
   - Build the Verses collection screen: filter chips (All/Learning/Reviewing/Mastered), verse rows (reference in Poppins, snippet in serif, status), overdue verses badged and sorted to top.
@@ -686,7 +678,7 @@ Documentation and token efficiency (keep Claude Code cheap to run)
 | 6 | KJV as second free translation | NICE-TO-HAVE | WEB is default. KJV is public-domain and trivial to add if requested. |
 | 7 | Streak freezes / challenge mode | LATER | Considered for 3.4. |
 | 8 | Group join for under-13 | V2 | Ensure the join-code flow for minors stays within kid-safe constraints. |
-| 9 | Deps added beyond Section 2 (by phase) | RECORDED | 1.1 required companions of listed libs, not new choices: react-dom (Expo Router web), react-native-url-polyfill (Supabase in RN), react-native-worklets (Reanimated 4 peer), babel-preset-expo + @react-native/jest-preset (Expo/jest-expo build). Toolchain pins for compat: tailwindcss 3.4 (NativeWind 4 needs Tailwind v3), Jest 29 (jest-expo 57), ESLint 9 (eslint-config-expo 57). Repo uses .npmrc legacy-peer-deps for the react/react-dom peer range. 1.3 added test-renderer (dev; @testing-library/react-native 14 peer, replacing the deprecated react-test-renderer). Deviation: 1.3 built animations with reanimated directly and did not use moti (moti stays a Section 2 dep for later phases); a manual jest mock at __mocks__/react-native-reanimated.js stubs the worklets runtime so animated components render in Node. |
+| 9 | Deps added beyond Section 2 (by phase) | RECORDED | 1.1 required companions of listed libs, not new choices: react-dom (Expo Router web), react-native-url-polyfill (Supabase in RN), react-native-worklets (Reanimated 4 peer), babel-preset-expo + @react-native/jest-preset (Expo/jest-expo build). Toolchain pins for compat: tailwindcss 3.4 (NativeWind 4 needs Tailwind v3), Jest 29 (jest-expo 57), ESLint 9 (eslint-config-expo 57). Repo uses .npmrc legacy-peer-deps for the react/react-dom peer range. 1.3 added test-renderer (dev; @testing-library/react-native 14 peer, replacing the deprecated react-test-renderer). Deviation: 1.3 built animations with reanimated directly and did not use moti (moti stays a Section 2 dep for later phases); a manual jest mock at __mocks__/react-native-reanimated.js stubs the worklets runtime so animated components render in Node. 1.5 added: @expo-google-fonts/poppins + expo-font (Poppins weights, per Section 1 brand type), expo-blur (frosted floating tab bar), react-native-svg (hand-authored tab/flame icons and the ProgressRing, since no icon library is in Section 2), zustand (theme-mode store for the light/dark toggle, brought forward from its Section 2 role). Also added react-native-web: not a shipped platform (runtime targets stay iOS 15+/Android 8+ per Section 2), it's dev-only tooling support so `expo start --web` and future `/design-sync` runs can render and screenshot-verify UI changes without a native simulator build. |
 
 > When you resolve an item, move it to BUILD_HISTORY.md with the date and reasoning, and update the
 > affected sections above.

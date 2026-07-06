@@ -2,7 +2,7 @@ import type { Tier } from '@/domain/firstLetter';
 
 /**
  * Temporary seeded verse for the Phase 1.3 session demo. The real session pulls
- * due verses from the SRS queue (1.4) and the library/data layer (1.5); until
+ * due verses from the SRS queue (1.4) and the verses/data layer (1.6); until
  * then this hard-coded WEB (public-domain) verse lets a user run a session
  * end-to-end. Remove once the data layer feeds the session.
  */
