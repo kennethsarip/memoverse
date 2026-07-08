@@ -1,27 +1,34 @@
 import { Pressable, Text, View } from 'react-native';
 
+import type { Tier } from '@/domain/firstLetter';
 import { radii, spacing, typography, useTheme } from '@/theme';
+
+import { StageStepper } from './StageStepper';
 
 interface SessionHeaderProps {
   reference: string;
-  tier: number;
-  /** Fraction of the verse completed, 0..1, driving the progress bar. */
+  tier: Tier;
+  /** Fraction of the current stage completed, 0..1, driving the progress bar. */
   progress: number;
   onClose: () => void;
+  /** True for a no-stakes practice run launched from Verses (Phase 1.9). */
+  isPractice?: boolean;
 }
 
-/** Top bar for the session: close control, reference, tier badge, progress. */
+/** Top bar for the session: close control, reference + practice badge, the
+ * linked stage stepper, and a progress bar for the active stage. */
 export function SessionHeader({
   reference,
   tier,
   progress,
   onClose,
+  isPractice = false,
 }: SessionHeaderProps) {
   const { colors } = useTheme();
   const clamped = Math.min(Math.max(progress, 0), 1);
 
   return (
-    <View style={{ gap: spacing.md }}>
+    <View style={{ gap: spacing.lg }}>
       <View
         style={{
           flexDirection: 'row',
@@ -42,19 +49,23 @@ export function SessionHeader({
           {reference}
         </Text>
 
-        <View
-          style={{
-            paddingHorizontal: spacing.md,
-            paddingVertical: spacing.xs,
-            borderRadius: radii.full,
-            backgroundColor: colors.surfaceMuted,
-          }}
-        >
-          <Text style={{ ...typography.caption, color: colors.primary }}>
-            Tier {tier}
-          </Text>
-        </View>
+        {isPractice ? (
+          <View
+            style={{
+              paddingHorizontal: spacing.md,
+              paddingVertical: spacing.xs,
+              borderRadius: radii.full,
+              backgroundColor: colors.surfaceMuted,
+            }}
+          >
+            <Text style={{ ...typography.caption, color: colors.primary }}>Practice</Text>
+          </View>
+        ) : (
+          <View style={{ width: 52 }} />
+        )}
       </View>
+
+      <StageStepper currentTier={tier} />
 
       <View
         accessibilityRole="progressbar"

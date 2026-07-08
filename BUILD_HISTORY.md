@@ -16,6 +16,32 @@ Entry format:
 
 ---
 
+## 1.9 Session screen (full port and polish) — 2026-07-07
+
+Composed the full designed session on top of the 1.3 components: a new StageStepper (linked
+1-2-3 "Type it / Memorize it / Master it") replaces the old "Tier N" pill in SessionHeader,
+driven by the verse's persisted, interval-driven stage (tierForState, Section 8.3); a blinking
+caret (static under reduced motion) marks the current hidden word in WordChip, and hidden blanks
+still reserve the word's character width via the existing underscore mask (no layout shift).
+Added a multi-stage runner in app/session: starting from a verse's persisted stage, the learner
+can drill up through the remaining stages within one sitting (a per-session practice aid per
+Section 8.3, not a persisted change) via a new StageDashboard between-stage screen (accuracy
+pill green/red at the 90% gate, Repeat always available, Continue gated at >=90% except on the
+final stage, plus a quiet "finish for today" escape hatch so a learner is never stuck). On
+finishing the final stage or bailing early, a new pure gradeFromAccuracy() (src/domain/srs, TDD,
+100% coverage) maps the stage accuracy to an SM-2 grade, and a new
+data/library.recordSessionOutcome() calls schedule() (1.4), derives the new tier/mastery, writes
+the updated verse_progress row (dueOn via a new addDaysToKey date util), and appends a
+review_event to the local store. Verses and Home now navigate to /session?userVerseId=... so a
+real library verse resumes at its true stage; Verses' VerseRow gained a secondary "Practice"
+action that launches the same session with practice=1 (no-stakes: skips recordSessionOutcome
+entirely, and SessionCompleteCard/SessionHeader show a "Practice" badge/caption instead of the
+real-session copy). XP/streak stay Phase-1.12 placeholders in both modes. 119 tests pass (5 new),
+100% domain coverage; typecheck, lint, and an `expo export --platform web` bundle (1462 modules)
+all green. No Playwright/browser tool was available this session, so the interactive
+simulator/browser walkthrough (tapping through all three stages, both gate outcomes, and
+free-practice) is the user's to run, consistent with prior phases' on-device checkpoints.
+
 ## 1.8 Bible verse-picker screen — 2026-07-07
 
 Built the Bible tab as a 3-step picker: book list (divided OT/NT with a grey rule), chapter-number grid (new ChapterGrid component), and flowing passage view with tap-to-select and superscript verse numbers. Domain logic: pure bible/books.ts with canonical 66-book list and chapter counts (39 OT, 27 NT), independent of Supabase seed. Repositories: added getScriptureRefsForChapter() and addRefsToLibrary() helpers (refactored from 1.6). Graceful empty/coming-soon state for unseeded chapters (5 verses seeded total). 114 tests green, 100% domain coverage; web bundle check clean (1467 modules, zero errors).

@@ -11,6 +11,8 @@ interface VerseRowProps {
   status: LibraryStatus;
   overdue: boolean;
   onPress?: () => void;
+  /** Launches a no-stakes free-practice run for this verse (Phase 1.9). */
+  onPractice?: () => void;
 }
 
 const STATUS_LABEL: Record<LibraryStatus, string> = {
@@ -27,6 +29,7 @@ export function VerseRow({
   status,
   overdue,
   onPress,
+  onPractice,
 }: VerseRowProps) {
   const { colors } = useTheme();
 
@@ -76,6 +79,21 @@ export function VerseRow({
       >
         {snippet}
       </Text>
+      {onPractice ? (
+        <Pressable
+          onPress={onPractice}
+          hitSlop={8}
+          accessibilityRole="button"
+          accessibilityLabel={`Practice ${reference} for fun, no stakes`}
+          style={({ pressed }) => ({
+            alignSelf: 'flex-start',
+            marginTop: spacing.sm,
+            opacity: pressed ? 0.7 : 1,
+          })}
+        >
+          <Text style={{ ...typography.caption, color: colors.primary }}>Practice</Text>
+        </Pressable>
+      ) : null}
     </Pressable>
   );
 }

@@ -1,11 +1,13 @@
 import { create } from 'zustand';
 
-import type { UserVerseRecord, VerseProgressRecord } from './types';
+import type { ReviewEventRecord, UserVerseRecord, VerseProgressRecord } from './types';
 
 interface LocalLibraryState {
   userVerses: UserVerseRecord[];
   verseProgress: VerseProgressRecord[];
+  reviewEvents: ReviewEventRecord[];
   addVerse: (userVerse: UserVerseRecord, progress: VerseProgressRecord) => void;
+  applyReviewOutcome: (progress: VerseProgressRecord, event: ReviewEventRecord) => void;
 }
 
 /**
@@ -18,9 +20,19 @@ interface LocalLibraryState {
 export const useLocalLibraryStore = create<LocalLibraryState>((set) => ({
   userVerses: [],
   verseProgress: [],
+  reviewEvents: [],
   addVerse: (userVerse, progress) =>
     set((state) => ({
       userVerses: [...state.userVerses, userVerse],
       verseProgress: [...state.verseProgress, progress],
+    })),
+  // Replaces one verse_progress row (by userVerseId) and appends one
+  // review_event, in a single update (Section 7, Phase 1.9 session finish).
+  applyReviewOutcome: (progress, event) =>
+    set((state) => ({
+      verseProgress: state.verseProgress.map((row) =>
+        row.userVerseId === progress.userVerseId ? progress : row,
+      ),
+      reviewEvents: [...state.reviewEvents, event],
     })),
 }));

@@ -4,5 +4,8 @@ export {
   addCustomVerseToLibrary,
   addPackToLibrary,
   addRefsToLibrary,
+  getSessionVerse,
+  recordSessionOutcome,
   useLibraryVerses,
+  type SessionVerse,
 } from './libraryRepository';

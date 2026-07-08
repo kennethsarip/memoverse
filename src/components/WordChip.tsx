@@ -1,8 +1,9 @@
 import { useEffect, useRef } from 'react';
-import { Text } from 'react-native';
+import { Text, View } from 'react-native';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
+  withRepeat,
   withSequence,
   withSpring,
   withTiming,
@@ -26,6 +27,39 @@ interface WordChipProps {
 // stays as a memory cue without revealing the first letter (matches the drill).
 function maskWord(raw: string): string {
   return raw.replace(/[\p{L}\p{N}]/gu, '_');
+}
+
+/** Blinking caret shown after the current hidden word (Section 7, Phase 1.9).
+ * Static (always on) under reduced motion, since it still marks position. */
+function Caret({ color, reducedMotion }: { color: string; reducedMotion: boolean }) {
+  const opacity = useSharedValue(1);
+
+  useEffect(() => {
+    if (!reducedMotion) {
+      opacity.value = withRepeat(
+        withSequence(withTiming(0, { duration: 500 }), withTiming(1, { duration: 500 })),
+        -1,
+      );
+    }
+  }, [reducedMotion, opacity]);
+
+  const style = useAnimatedStyle(() => ({ opacity: opacity.value }));
+
+  return (
+    <Animated.View
+      accessibilityElementsHidden
+      style={[
+        {
+          width: 2,
+          height: typography.verse.fontSize * 0.9,
+          marginLeft: 2,
+          borderRadius: 1,
+          backgroundColor: color,
+        },
+        style,
+      ]}
+    />
+  );
 }
 
 /**
@@ -114,9 +148,16 @@ export function WordChip({
           {token.raw}
         </Text>
       ) : (
-        <Text style={{ ...typography.verse, color: colors.textMuted, letterSpacing: 2 }}>
-          {maskWord(token.raw)}
-        </Text>
+        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+          <Text
+            style={{ ...typography.verse, color: colors.textMuted, letterSpacing: 2 }}
+          >
+            {maskWord(token.raw)}
+          </Text>
+          {isCurrent ? (
+            <Caret color={colors.primary} reducedMotion={reducedMotion} />
+          ) : null}
+        </View>
       )}
     </Animated.View>
   );

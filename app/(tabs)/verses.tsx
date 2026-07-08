@@ -89,7 +89,10 @@ export default function VersesScreen() {
             snippet={item.snippet}
             status={statusForVerse(item)}
             overdue={isOverdue(item.dueOn, now)}
-            onPress={() => router.push('/session')}
+            onPress={() => router.push(`/session?userVerseId=${item.userVerseId}`)}
+            onPractice={() =>
+              router.push(`/session?userVerseId=${item.userVerseId}&practice=1`)
+            }
           />
         )}
         ListEmptyComponent={

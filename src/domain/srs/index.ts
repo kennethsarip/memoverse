@@ -12,5 +12,6 @@ export type {
   Tier,
 } from './types';
 export { INITIAL_SRS_STATE, schedule } from './scheduler';
+export { gradeFromAccuracy } from './grade';
 export { isMastered, tierForState } from './stages';
 export { buildDueQueue, DEFAULT_NEW_VERSES_PER_SESSION } from './dueQueue';

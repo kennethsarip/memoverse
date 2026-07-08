@@ -29,3 +29,16 @@ export interface VerseProgressRecord {
   lastGrade: Grade | null;
   isMastered: boolean;
 }
+
+/** Mirrors the review_events columns (Section 5.1): an append-only history
+ * of graded stage attempts, one per stage completed in a session. */
+export interface ReviewEventRecord {
+  id: string;
+  userVerseId: string;
+  reviewedAt: string;
+  mode: 'first_letter';
+  difficultyTier: 1 | 2 | 3;
+  grade: Grade;
+  accuracy: number;
+  durationMs: number | null;
+}

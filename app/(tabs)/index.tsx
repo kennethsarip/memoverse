@@ -75,8 +75,8 @@ export default function HomeScreen() {
     router.push('/verses');
   }
 
-  function goToSession() {
-    router.push('/session');
+  function goToSession(userVerseId?: string) {
+    router.push(userVerseId ? `/session?userVerseId=${userVerseId}` : '/session');
   }
 
   return (
@@ -175,7 +175,7 @@ export default function HomeScreen() {
                   snippet={verse.snippet}
                   status={statusForVerse(verse)}
                   overdue={verse.dueOn < now}
-                  onPress={goToSession}
+                  onPress={() => goToSession(verse.userVerseId)}
                 />
               ))}
             </View>

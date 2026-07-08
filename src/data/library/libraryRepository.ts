@@ -1,5 +1,13 @@
-import { INITIAL_SRS_STATE } from '@/domain/srs';
+import {
+  gradeFromAccuracy,
+  INITIAL_SRS_STATE,
+  isMastered,
+  schedule,
+  tierForState,
+} from '@/domain/srs';
+import type { Grade } from '@/domain/srs';
 import type { CustomVerseInput, LibraryVerse } from '@/domain/verses';
+import { addDaysToKey } from '@/utils/date';
 
 import {
   getPackItems,
@@ -8,7 +16,7 @@ import {
   getWebTranslationId,
 } from '../content';
 import { useLocalLibraryStore } from './localLibraryStore';
-import type { UserVerseRecord, VerseProgressRecord } from './types';
+import type { ReviewEventRecord, UserVerseRecord, VerseProgressRecord } from './types';
 
 function generateLocalId(): string {
   return `local_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 10)}`;
@@ -153,6 +161,92 @@ function toLibraryVerse(
     lastGrade: progress.lastGrade,
     dueOn: progress.dueOn,
   };
+}
+
+/** The shape the session screen (Section 7, Phase 1.9) needs to run a verse:
+ * its display text/reference plus the persisted stage it should start at. */
+export interface SessionVerse {
+  userVerseId: string;
+  reference: string;
+  text: string;
+  startTier: 1 | 2 | 3;
+}
+
+/** Look up one library verse by id for the session screen, deriving its
+ * start tier from the persisted SRS interval (Section 8.3) rather than the
+ * stored difficultyTier column, so a verse always resumes at its true stage. */
+export function getSessionVerse(userVerseId: string): SessionVerse | null {
+  const state = useLocalLibraryStore.getState();
+  const userVerse = state.userVerses.find((v) => v.id === userVerseId);
+  const progress = state.verseProgress.find((p) => p.userVerseId === userVerseId);
+  if (!userVerse || !progress) return null;
+
+  return {
+    userVerseId,
+    reference: userVerse.cachedReference,
+    text: userVerse.cachedSnippet,
+    startTier: tierForState({
+      easeFactor: progress.easeFactor,
+      intervalDays: progress.intervalDays,
+      repetitions: progress.repetitions,
+    }),
+  };
+}
+
+/**
+ * Finish a graded session for one verse (Section 7, Phase 1.9): run schedule()
+ * on the persisted SRS state, derive the new stage and mastery, write the
+ * updated verse_progress row, and append one review_event. No-op (returns
+ * false) if the verse is not in the library, e.g. a free-practice run on the
+ * seeded demo verse that was never added.
+ */
+export function recordSessionOutcome(
+  userVerseId: string,
+  finishedTier: 1 | 2 | 3,
+  accuracy: number,
+  now: string,
+  durationMs: number | null = null,
+): boolean {
+  const progress = useLocalLibraryStore
+    .getState()
+    .verseProgress.find((p) => p.userVerseId === userVerseId);
+  if (!progress) return false;
+
+  const grade: Grade = gradeFromAccuracy(accuracy);
+  const scheduled = schedule(
+    {
+      easeFactor: progress.easeFactor,
+      intervalDays: progress.intervalDays,
+      repetitions: progress.repetitions,
+    },
+    grade,
+  );
+
+  const nextProgress: VerseProgressRecord = {
+    ...progress,
+    difficultyTier: tierForState(scheduled),
+    easeFactor: scheduled.easeFactor,
+    intervalDays: scheduled.intervalDays,
+    repetitions: scheduled.repetitions,
+    dueOn: addDaysToKey(now, scheduled.dueInDays),
+    lastReviewedAt: now,
+    lastGrade: grade,
+    isMastered: isMastered(scheduled, grade),
+  };
+
+  const event: ReviewEventRecord = {
+    id: generateLocalId(),
+    userVerseId,
+    reviewedAt: now,
+    mode: 'first_letter',
+    difficultyTier: finishedTier,
+    grade,
+    accuracy,
+    durationMs,
+  };
+
+  useLocalLibraryStore.getState().applyReviewOutcome(nextProgress, event);
+  return true;
 }
 
 /** Reactive read of the guest library, joined with SRS state, for the Verses screen. */

@@ -22,5 +22,6 @@ module.exports = {
   withSpring: (toValue) => toValue,
   withSequence: (...steps) => steps[steps.length - 1],
   withDelay: (_delay, animation) => animation,
+  withRepeat: (animation) => animation,
   Easing: { linear: (t) => t },
 };

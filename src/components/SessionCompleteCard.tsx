@@ -21,6 +21,8 @@ interface SessionCompleteCardProps {
   verseReference?: string;
   onContinue: () => void;
   reducedMotion: boolean;
+  /** No-stakes practice run (Phase 1.9): never touched SRS or the streak. */
+  isPractice?: boolean;
 }
 
 function StatTile({
@@ -99,6 +101,7 @@ export function SessionCompleteCard({
   verseReference,
   onContinue,
   reducedMotion,
+  isPractice = false,
 }: SessionCompleteCardProps) {
   const { colors } = useTheme();
   const progress = useSharedValue(reducedMotion ? 1 : 0);
@@ -167,7 +170,9 @@ export function SessionCompleteCard({
           textAlign: 'center',
         }}
       >
-        XP, streak, and badges go live in the gamification phase.
+        {isPractice
+          ? 'Practice mode — this run never touches your SRS schedule or streak.'
+          : 'XP, streak, and badges go live in the gamification phase.'}
       </Text>
 
       <Button title="Continue" onPress={onContinue} />

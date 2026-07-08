@@ -412,13 +412,6 @@ group_assignments (
 > src/theme tokens (no hard-coded styles). Build one screen per phase so each ends at a visible,
 > demoable checkpoint with typecheck, lint, and tests green.
 
-- 1.9 Session screen (full port and polish)
-  - Compose the full designed session from the 1.3 components: the linked 1-2-3 stage stepper (Type it / Memorize it / Master it) reflecting the verse's interval-driven stage (Section 8.3); hidden blanks that reserve exact word width (no layout shift); a blinking caret overlay; one-shot keystroke feedback (correct = ink, wrong = red shake, no green in words).
-  - Accuracy pill (green >=90%, red below); free-practice mode launched from Verses is no-stakes (small XP, never touches SRS or streak).
-  - Between-stage dashboard (Repeat / Continue) gated at >=90%; a session-complete celebration (XP, streak, any new badge) with gamification placeholders until 1.12.
-  - On completion, assign a grade, call schedule() (1.4) to set the next due date and persist interval/stage, and append a review_event.
-  - Checkpoint: run a verse through the stages; SRS state advances per Sections 8.2/8.3; the celebration shows; reduced motion honored.
-
 - 1.10 Onboarding (guest-first taster and age gate)
   - Build the guest-first taster: a fresh install opens straight into memorizing one short verse, no account (per the onboarding mockup).
   - Build the age gate (birth year, neutral phrasing) that sets age_band and kids_mode; under_13 enters kids-mode (minimal data, nothing personalized).
