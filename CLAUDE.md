@@ -412,12 +412,6 @@ group_assignments (
 > src/theme tokens (no hard-coded styles). Build one screen per phase so each ends at a visible,
 > demoable checkpoint with typecheck, lint, and tests green.
 
-- 1.8 Bible verse-picker screen
-  - Build the Bible tab as a picker (not a reader): a top-to-bottom list of full book names with a single grey rule dividing Old and New Testament, a chapter number grid, and a continuous passage view (flowing text, superscript verse numbers).
-  - Tap to select a verse or range -> "Add to my verses" (creates user_verses + verse_progress via the 1.6 repositories).
-  - Read scripture_refs/verse_texts through repositories; show a graceful empty/coming-soon state for refs not yet seeded.
-  - Checkpoint: from the Bible tab, select John 3:16 and it is added to Verses and enters the due queue.
-
 - 1.9 Session screen (full port and polish)
   - Compose the full designed session from the 1.3 components: the linked 1-2-3 stage stepper (Type it / Memorize it / Master it) reflecting the verse's interval-driven stage (Section 8.3); hidden blanks that reserve exact word width (no layout shift); a blinking caret overlay; one-shot keystroke feedback (correct = ink, wrong = red shake, no green in words).
   - Accuracy pill (green >=90%, red below); free-practice mode launched from Verses is no-stakes (small XP, never touches SRS or streak).

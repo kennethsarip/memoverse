@@ -3,5 +3,6 @@
 export {
   addCustomVerseToLibrary,
   addPackToLibrary,
+  addRefsToLibrary,
   useLibraryVerses,
 } from './libraryRepository';

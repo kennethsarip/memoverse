@@ -58,3 +58,13 @@ export function PlusIcon({ color, size = 22 }: TabIconProps) {
     </Svg>
   );
 }
+
+/** Back-navigation chevron for the Bible tab's books -> chapters -> passage
+ * drill-down (Section 7, Phase 1.8). */
+export function ChevronLeftIcon({ color, size = 22 }: TabIconProps) {
+  return (
+    <Svg width={size} height={size} viewBox="0 0 24 24" stroke={color} {...strokeProps}>
+      <Path d="M15 5l-7 7 7 7" />
+    </Svg>
+  );
+}

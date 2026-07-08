@@ -49,37 +49,42 @@ export function addCustomVerseToLibrary(input: CustomVerseInput, now: string): v
     .addVerse(userVerse, createInitialProgress(userVerse.id, now));
 }
 
-/**
- * Start a curated pack: add every scripture reference in the pack that is not
- * already in the library, each as its own user_verse + fresh verse_progress
- * (Section 7, Phase 1.6 — "Start pack" creates the initial SRS queue entries).
- */
-export async function addPackToLibrary(
-  packId: string,
-  now: string,
-): Promise<{ added: number }> {
-  const items = await getPackItems(packId);
-  const existingRefIds = new Set(
+function existingScriptureRefIds(): Set<string> {
+  return new Set(
     useLocalLibraryStore
       .getState()
-      .userVerses.filter((v) => v.scriptureRefId !== null)
-      .map((v) => v.scriptureRefId),
+      .userVerses.flatMap((v) => (v.scriptureRefId ? [v.scriptureRefId] : [])),
   );
-  const newItems = items.filter((item) => !existingRefIds.has(item.scriptureRefId));
-  if (newItems.length === 0) return { added: 0 };
+}
 
-  const refIds = newItems.map((item) => item.scriptureRefId);
+/**
+ * Add a set of scripture references to the library, each as its own
+ * user_verse + fresh verse_progress, skipping refs already in the library
+ * and refs whose content has not been seeded yet. Shared by "start a pack"
+ * (Section 7, Phase 1.6) and the Bible tab's "add to my verses" (Phase 1.8) —
+ * both add structured (non-free-text) verses, so both use source: 'pack' per
+ * the user_verses.source check constraint (Section 5.1: 'pack' | 'custom').
+ */
+async function addScriptureRefsToLibrary(
+  refIds: string[],
+  now: string,
+): Promise<{ added: number }> {
+  const existingRefIds = existingScriptureRefIds();
+  const newRefIds = refIds.filter((id) => !existingRefIds.has(id));
+  if (newRefIds.length === 0) return { added: 0 };
+
   const translationId = await getWebTranslationId();
   const [refs, texts] = await Promise.all([
-    getScriptureRefsByIds(refIds),
-    getVerseTexts(refIds, translationId),
+    getScriptureRefsByIds(newRefIds),
+    getVerseTexts(newRefIds, translationId),
   ]);
   const refById = new Map(refs.map((ref) => [ref.id, ref]));
   const textByRefId = new Map(texts.map((text) => [text.scriptureRefId, text]));
 
-  for (const item of newItems) {
-    const ref = refById.get(item.scriptureRefId);
-    const text = textByRefId.get(item.scriptureRefId);
+  let added = 0;
+  for (const refId of newRefIds) {
+    const ref = refById.get(refId);
+    const text = textByRefId.get(refId);
     if (!ref || !text) continue; // content not yet seeded for this reference; skip gracefully
 
     const userVerse: UserVerseRecord = {
@@ -97,9 +102,37 @@ export async function addPackToLibrary(
     useLocalLibraryStore
       .getState()
       .addVerse(userVerse, createInitialProgress(userVerse.id, now));
+    added += 1;
   }
 
-  return { added: newItems.length };
+  return { added };
+}
+
+/**
+ * Start a curated pack: add every scripture reference in the pack that is not
+ * already in the library (Section 7, Phase 1.6 — "Start pack" creates the
+ * initial SRS queue entries).
+ */
+export async function addPackToLibrary(
+  packId: string,
+  now: string,
+): Promise<{ added: number }> {
+  const items = await getPackItems(packId);
+  return addScriptureRefsToLibrary(
+    items.map((item) => item.scriptureRefId),
+    now,
+  );
+}
+
+/**
+ * Add one or more scripture references picked from the Bible tab (a single
+ * verse or a contiguous range) to the library (Section 7, Phase 1.8).
+ */
+export async function addRefsToLibrary(
+  refIds: string[],
+  now: string,
+): Promise<{ added: number }> {
+  return addScriptureRefsToLibrary(refIds, now);
 }
 
 function toLibraryVerse(

@@ -16,6 +16,10 @@ Entry format:
 
 ---
 
+## 1.8 Bible verse-picker screen — 2026-07-07
+
+Built the Bible tab as a 3-step picker: book list (divided OT/NT with a grey rule), chapter-number grid (new ChapterGrid component), and flowing passage view with tap-to-select and superscript verse numbers. Domain logic: pure bible/books.ts with canonical 66-book list and chapter counts (39 OT, 27 NT), independent of Supabase seed. Repositories: added getScriptureRefsForChapter() and addRefsToLibrary() helpers (refactored from 1.6). Graceful empty/coming-soon state for unseeded chapters (5 verses seeded total). 114 tests green, 100% domain coverage; web bundle check clean (1467 modules, zero errors).
+
 ## 1.7 Home screen (daily hub) — 2026-07-07
 
 Built the Home screen from the mockup: Fount wordmark with a ThemeToggle, time-of-day greeting,
