@@ -1,5 +1,7 @@
 import {
+  isDueForReview,
   isOverdue,
+  libraryStats,
   matchesFilter,
   sortForLibrary,
   statusForVerse,
@@ -101,5 +103,52 @@ describe('sortForLibrary', () => {
       'today',
       'upcoming',
     ]);
+  });
+});
+
+describe('isDueForReview', () => {
+  it('is due when the due day is today or earlier', () => {
+    expect(isDueForReview('2026-07-05', '2026-07-06')).toBe(true);
+    expect(isDueForReview('2026-07-06', '2026-07-06')).toBe(true);
+  });
+
+  it('is not due when the due day is in the future', () => {
+    expect(isDueForReview('2026-07-07', '2026-07-06')).toBe(false);
+  });
+});
+
+describe('libraryStats', () => {
+  it('tallies status counts and due count for the Home stats row', () => {
+    const now = '2026-07-06';
+    const learning = verse({ userVerseId: 'a', dueOn: now });
+    const reviewing = verse({
+      userVerseId: 'b',
+      srsState: { easeFactor: 2.5, intervalDays: 3, repetitions: 2 },
+      dueOn: '2026-07-10',
+    });
+    const mastered = verse({
+      userVerseId: 'c',
+      srsState: { easeFactor: 2.5, intervalDays: 21, repetitions: 6 },
+      lastGrade: 4,
+      dueOn: '2026-07-01',
+    });
+
+    expect(libraryStats([learning, reviewing, mastered], now)).toEqual({
+      total: 3,
+      learning: 1,
+      reviewing: 1,
+      mastered: 1,
+      dueCount: 2,
+    });
+  });
+
+  it('returns all zeros for an empty library', () => {
+    expect(libraryStats([], '2026-07-06')).toEqual({
+      total: 0,
+      learning: 0,
+      reviewing: 0,
+      mastered: 0,
+      dueCount: 0,
+    });
   });
 });

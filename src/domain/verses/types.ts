@@ -31,3 +31,12 @@ export interface CustomVerseValidation {
     text?: string;
   };
 }
+
+/** Home-screen library tallies (Section 7, Phase 1.7 stats row). */
+export interface LibraryStats {
+  total: number;
+  learning: number;
+  reviewing: number;
+  mastered: number;
+  dueCount: number;
+}

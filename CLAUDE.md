@@ -412,12 +412,6 @@ group_assignments (
 > src/theme tokens (no hard-coded styles). Build one screen per phase so each ends at a visible,
 > demoable checkpoint with typecheck, lint, and tests green.
 
-- 1.7 Home screen (daily hub)
-  - Build Home to the mockup: Fount logo/wordmark + theme toggle, greeting, streak card with the animated flame and day-of-week strip, Level/XP card, the calm "verses to review -> Start review" CTA (routes to Verses, surfaces the overdue count), stats row, continue-learning cards (tap -> session), and verse of the day (serif).
-  - Consume the 1.4 due queue and 1.6 repositories; gamification values (XP/streak) use placeholders until 1.12.
-  - Reduced-motion variant for the flame; accessibility labels; tokens only.
-  - Checkpoint: Home matches the mockup in light/dark, the CTA routes to Verses with a real overdue count, and a continue card launches the session.
-
 - 1.8 Bible verse-picker screen
   - Build the Bible tab as a picker (not a reader): a top-to-bottom list of full book names with a single grey rule dividing Old and New Testament, a chapter number grid, and a continuous passage view (flowing text, superscript verse numbers).
   - Tap to select a verse or range -> "Add to my verses" (creates user_verses + verse_progress via the 1.6 repositories).

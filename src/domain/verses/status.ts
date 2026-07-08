@@ -1,6 +1,6 @@
 import { isMastered, tierForState } from '@/domain/srs';
 
-import type { LibraryStatus, LibraryVerse } from './types';
+import type { LibraryStats, LibraryStatus, LibraryVerse } from './types';
 
 /**
  * Map a verse's SRS state to a Verses-screen status (Section 7, Phase 1.6
@@ -43,4 +43,30 @@ export function sortForLibrary(verses: LibraryVerse[], now: string): LibraryVers
     if (a.dueOn !== b.dueOn) return a.dueOn < b.dueOn ? -1 : 1;
     return a.userVerseId.localeCompare(b.userVerseId);
   });
+}
+
+/** A verse is due for today's session when its due day has arrived (overdue
+ * or due today) — the Home CTA and "continue learning" cards both read this. */
+export function isDueForReview(dueOn: string, now: string): boolean {
+  return dueOn <= now;
+}
+
+/**
+ * Home-screen tallies (Section 7, Phase 1.7 stats row): counts by status plus
+ * how many are due for review today, derived from the same status/overdue
+ * rules the Verses screen uses so the two screens never disagree.
+ */
+export function libraryStats(verses: LibraryVerse[], now: string): LibraryStats {
+  const stats: LibraryStats = {
+    total: verses.length,
+    learning: 0,
+    reviewing: 0,
+    mastered: 0,
+    dueCount: 0,
+  };
+  for (const verse of verses) {
+    stats[statusForVerse(verse)] += 1;
+    if (isDueForReview(verse.dueOn, now)) stats.dueCount += 1;
+  }
+  return stats;
 }

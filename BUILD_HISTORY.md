@@ -16,6 +16,18 @@ Entry format:
 
 ---
 
+## 1.7 Home screen (daily hub) — 2026-07-07
+
+Built the Home screen from the mockup: Fount wordmark with a ThemeToggle, time-of-day greeting,
+StreakCard (animated flame + day-of-week strip), LevelCard (ProgressRing + XP), "verses to review"
+CTA wired to real due-count (routes to Verses), StatTile row (Learning/Reviewing/Mastered counts),
+Continue-learning cards (tap -> session), and Verse of the day (Georgia serif, deterministic daily
+pick from library with fallback). Pure domain logic: isDueForReview() and libraryStats() in
+src/domain/verses/status.ts (TDD, 100% coverage). Gamification values (0 streak/0 XP/level 1)
+are placeholders per spec, landing in Phase 1.12. Reduced-motion, accessibility labels, and
+theme tokens throughout. 109 tests green; verified via Playwright on expo start --web in both
+light/dark with no console errors.
+
 ## 1.6 Verses screen, library, and add-verse — 2026-07-07
 
 Built the src/data content repositories (packs/pack_items, scripture_refs, verse_texts, WEB

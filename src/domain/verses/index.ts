@@ -6,8 +6,16 @@ export type {
   CustomVerseInput,
   CustomVerseValidation,
   LibraryFilter,
+  LibraryStats,
   LibraryStatus,
   LibraryVerse,
 } from './types';
-export { isOverdue, matchesFilter, sortForLibrary, statusForVerse } from './status';
+export {
+  isDueForReview,
+  isOverdue,
+  libraryStats,
+  matchesFilter,
+  sortForLibrary,
+  statusForVerse,
+} from './status';
 export { validateCustomVerseInput } from './validation';
