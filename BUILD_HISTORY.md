@@ -16,6 +16,20 @@ Entry format:
 
 ---
 
+## 1.6 Verses screen, library, and add-verse — 2026-07-07
+
+Built the src/data content repositories (packs/pack_items, scripture_refs, verse_texts, WEB
+translation id) and the src/data/library guest repository (in-memory zustand store standing in
+for accounts/offline storage until 1.11/1.14), plus src/domain/verses (status/overdue/sort/filter
+logic and free-text custom-verse validation, TDD). Built the Verses screen: filter chips (All/
+Learning/Reviewing/Mastered), a due-count badge, overdue-first sorted VerseRow list, and a
+floating "+" FAB opening AddVerseSheet — a bottom sheet to start a curated pack or add a free-text
+custom verse (picking a scripture_ref for a custom verse is deferred to the 1.8 Bible picker).
+Both paths write user_verses + initial verse_progress (stage 1, due today) into the SRS queue.
+Fixed two pre-existing bugs blocking the gates: an undefined `statusTone` reference in VerseRow
+and a set-state-in-effect lint violation in the new sheet (reset moved to the close handler).
+Typecheck, lint, and all 105 tests green; verified via a compiled web bundle (no simulator run).
+
 ## 1.5 Design system and app shell — 2026-07-06
 
 Built the living-water UI kit from the locked prototype (fetched its live CSS/SVG source for

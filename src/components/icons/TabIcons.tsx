@@ -49,3 +49,12 @@ export function ProfileIcon({ color, size = 22 }: TabIconProps) {
     </Svg>
   );
 }
+
+/** The add-verse FAB's plus glyph (Section 7, Phase 1.6). */
+export function PlusIcon({ color, size = 22 }: TabIconProps) {
+  return (
+    <Svg width={size} height={size} viewBox="0 0 24 24" stroke={color} {...strokeProps}>
+      <Path d="M12 5v14M5 12h14" />
+    </Svg>
+  );
+}

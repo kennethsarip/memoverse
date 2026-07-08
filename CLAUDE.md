@@ -412,13 +412,6 @@ group_assignments (
 > src/theme tokens (no hard-coded styles). Build one screen per phase so each ends at a visible,
 > demoable checkpoint with typecheck, lint, and tests green.
 
-- 1.6 Verses screen, library, and add-verse (data core)
-  - Build src/data repositories for packs/pack_items, scripture_refs, and verse_texts (WEB), plus user_verses and verse_progress; read WEB text through the repository (never Supabase directly from components).
-  - Build the Verses collection screen: filter chips (All/Learning/Reviewing/Mastered), verse rows (reference in Poppins, snippet in serif, status), overdue verses badged and sorted to top.
-  - Build the add-verse FAB and sheet: start a curated pack; add a custom verse (pick a scripture_ref OR paste free text, source='custom') with validation and user-safe errors. No cap.
-  - "Start pack" / "add verse" creates user_verses + initial verse_progress (stage 1, due today) into the SRS queue.
-  - Checkpoint: add a custom verse and start a pack; both appear in Verses and enter the due queue; the screen matches the mockup.
-
 - 1.7 Home screen (daily hub)
   - Build Home to the mockup: Fount logo/wordmark + theme toggle, greeting, streak card with the animated flame and day-of-week strip, Level/XP card, the calm "verses to review -> Start review" CTA (routes to Verses, surfaces the overdue count), stats row, continue-learning cards (tap -> session), and verse of the day (serif).
   - Consume the 1.4 due queue and 1.6 repositories; gamification values (XP/streak) use placeholders until 1.12.
